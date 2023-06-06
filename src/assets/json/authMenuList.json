@@ -30,6 +30,20 @@
       }
     },
     {
+      "path": "/map",
+      "name": "housemap",
+      "component": "/housemap/index",
+      "meta": {
+        "icon": "Histogram",
+        "title": "可视化地图",
+        "isLink": "",
+        "isHide": false,
+        "isFull": true,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
       "path": "/proTable",
       "name": "proTable",
       "redirect": "/proTable/useProTable",
