@@ -2,7 +2,7 @@
   <div class="table-box">
     <ProTable
       ref="proTable"
-      title="用户列表"
+      title="房产成交记录"
       :columns="columns"
       :request-api="getTableList"
       :init-param="initParam"
@@ -10,12 +10,12 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
-        <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 新增用户 </el-button>
-        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd"> 批量添加用户 </el-button>
-        <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile"> 导出用户数据 </el-button>
+        <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 新增记录 </el-button>
+        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd"> 批量添加记录 </el-button>
+        <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile"> 导出数据 </el-button>
         <el-button type="primary" plain @click="toDetail"> To 子集详情页面 </el-button>
         <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
-          批量删除用户
+          批量删除记录
         </el-button>
       </template>
       <!-- Expand -->
@@ -38,7 +38,6 @@
       <template #operation="scope">
         <el-button type="primary" link :icon="View" @click="openDrawer('查看', scope.row)"> 查看 </el-button>
         <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)"> 编辑 </el-button>
-        <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)"> 重置密码 </el-button>
         <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)"> 删除 </el-button>
       </template>
     </ProTable>
@@ -59,19 +58,19 @@ import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "@/components/ImportExcel/index.vue";
 import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
-import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
+import { CirclePlus, Delete, EditPen, Download, Upload, View } from "@element-plus/icons-vue";
 import {
-  getUserList,
   deleteUser,
   editUser,
   addUser,
   changeUserStatus,
-  resetUserPassWord,
   exportUserInfo,
   BatchAddUser,
   getUserStatus,
   getUserGender
 } from "@/api/modules/user";
+
+import { getEstateList } from "@/api/modules/estate";
 
 const router = useRouter();
 
@@ -104,7 +103,7 @@ const getTableList = (params: any) => {
   newParams.createTime && (newParams.startTime = newParams.createTime[0]);
   newParams.createTime && (newParams.endTime = newParams.createTime[1]);
   delete newParams.createTime;
-  return getUserList(newParams);
+  return getEstateList(newParams);
 };
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
@@ -217,12 +216,6 @@ const deleteAccount = async (params: User.ResUserList) => {
 const batchDelete = async (id: string[]) => {
   await useHandleData(deleteUser, { id }, "删除所选用户信息");
   proTable.value?.clearSelection();
-  proTable.value?.getTableList();
-};
-
-// 重置用户密码
-const resetPass = async (params: User.ResUserList) => {
-  await useHandleData(resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`);
   proTable.value?.getTableList();
 };
 

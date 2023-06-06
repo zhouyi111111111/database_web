@@ -26,3 +26,6 @@ def logout():
     return {"code": 200, "msg": "成功"}
 
 
+@app.post("/geeker/estate/list")
+def EstateList():
+    return {"code": 200, "msg": "成功"}

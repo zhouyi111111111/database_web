@@ -2,7 +2,7 @@
   <div class="main-box">
     <TreeFilter
       label="name"
-      title="部门列表(单选)"
+      title="市辖区"
       :data="treeFilterData"
       :default-value="initParam.departmentId"
       @change="changeTreeFilter"
@@ -10,7 +10,7 @@
     <div class="table-box">
       <ProTable
         ref="proTable"
-        title="用户列表"
+        title="成交记录表"
         row-key="id"
         :indent="30"
         :columns="columns"
@@ -21,7 +21,7 @@
       >
         <!-- 表格 header 按钮 -->
         <template #tableHeader>
-          <el-button type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 新增用户 </el-button>
+          <el-button type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 新增记录 </el-button>
         </template>
         <!-- 表格操作 -->
         <template #operation="scope">
