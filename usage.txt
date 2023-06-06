@@ -1,0 +1,31 @@
+正常启动启动
+backend:                    // 启动后端
+    uvicorn main:app --reload
+web-admin-template:         // 启动前端
+    pnpm dev
+
+
+
+配环境（仅第一次启动前需要执行）：
+
+    web-admin-template 目录 配置vue3环境
+        pnpm install
+
+    backend目录（单独配置python环境）：
+        pip install fastapi
+        pip install "uvicorn[standard]"
+
+        source venv/bin/activate    // 进虚拟环境
+        deactivate                  // 出虚拟环境
+
+
+
+
+
+
+
+
+
+
+
+
