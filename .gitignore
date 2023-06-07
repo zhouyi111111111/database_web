@@ -27,3 +27,4 @@ stats.html
 
 backend/node_modules
 src/assets/mock/geeker
+PythonBackend/sql_app/db_info.json

@@ -52,24 +52,13 @@ import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { useHandleData } from "@/hooks/useHandleData";
 import { useDownload } from "@/hooks/useDownload";
-import { useAuthButtons } from "@/hooks/useAuthButtons";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "@/components/ImportExcel/index.vue";
 import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
-import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
+import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, EditPen, Download, Upload, View } from "@element-plus/icons-vue";
-import {
-  deleteUser,
-  editUser,
-  addUser,
-  changeUserStatus,
-  exportUserInfo,
-  BatchAddUser,
-  getUserStatus,
-  getUserGender
-} from "@/api/modules/user";
-
+import { deleteUser, editUser, addUser, exportUserInfo, BatchAddUser } from "@/api/modules/user";
 import { getEstateList } from "@/api/modules/estate";
 
 const router = useRouter();
@@ -107,16 +96,16 @@ const getTableList = (params: any) => {
 };
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
-const { BUTTONS } = useAuthButtons();
+// const { BUTTONS } = useAuthButtons();
 
 // 自定义渲染表头（使用tsx语法）
-const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
-  return (
-    <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
-      {scope.column.label}
-    </el-button>
-  );
-};
+// const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
+//   return (
+//     <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
+//       {scope.column.label}
+//     </el-button>
+//   );
+// };
 
 // 表格配置项
 const columns: ColumnProps<User.ResUserList>[] = [
@@ -124,86 +113,45 @@ const columns: ColumnProps<User.ResUserList>[] = [
   { type: "index", label: "#", width: 80 },
   { type: "expand", label: "Expand", width: 100 },
   {
-    prop: "username",
-    label: "用户姓名",
-    search: { el: "input" },
-    render: scope => {
-      return (
-        <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
-          {scope.row.username}
-        </el-button>
-      );
-    }
+    prop: "estatename",
+    label: "房源名称",
+    search: { el: "input" }
+    // render: scope => {
+    //   return (
+    //     <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
+    //       {scope.row.username}
+    //     </el-button>
+    //   );
+    // }
   },
-  {
-    prop: "gender",
-    label: "性别",
-    // 字典数据
-    // enum: genderType,
-    // 字典请求不带参数
-    enum: getUserGender,
-    // 字典请求携带参数
-    // enum: () => getUserGender({ id: 1 }),
-    search: { el: "select", props: { filterable: true } },
-    fieldNames: { label: "genderLabel", value: "genderValue" }
-  },
-  {
-    // 多级 prop
-    prop: "user.detail.age",
-    label: "年龄",
-    search: {
-      // 自定义 search 显示内容
-      render: ({ searchParam }) => {
-        return (
-          <div class="flx-center">
-            <el-input vModel_trim={searchParam.minAge} placeholder="最小年龄" />
-            <span class="mr10 ml10">-</span>
-            <el-input vModel_trim={searchParam.maxAge} placeholder="最大年龄" />
-          </div>
-        );
-      }
-    }
-  },
-  { prop: "idCard", label: "身份证号", search: { el: "input" } },
-  { prop: "email", label: "邮箱" },
-  { prop: "address", label: "居住地址" },
-  {
-    prop: "status",
-    label: "用户状态",
-    enum: getUserStatus,
-    search: { el: "tree-select", props: { filterable: true } },
-    fieldNames: { label: "userLabel", value: "userStatus" },
-    render: scope => {
-      return (
-        <>
-          {BUTTONS.value.status ? (
-            <el-switch
-              model-value={scope.row.status}
-              active-text={scope.row.status ? "启用" : "禁用"}
-              active-value={1}
-              inactive-value={0}
-              onClick={() => changeStatus(scope.row)}
-            />
-          ) : (
-            <el-tag type={scope.row.status ? "success" : "danger"}>{scope.row.status ? "启用" : "禁用"}</el-tag>
-          )}
-        </>
-      );
-    }
-  },
-  {
-    prop: "createTime",
-    label: "创建时间",
-    headerRender,
-    width: 180,
-    search: {
-      el: "date-picker",
-      span: 2,
-      props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
-      defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"]
-    }
-  },
-  { prop: "operation", label: "操作", fixed: "right", width: 330 }
+  { prop: "id", label: "ID" },
+  { prop: "estatename", label: "楼盘名称" },
+  { prop: "lug", label: "经度" },
+  { prop: "lat", label: "纬度" },
+  { prop: "prvin", label: "省份" },
+  { prop: "city", label: "城市" },
+  { prop: "munici", label: "区县" },
+  { prop: "community", label: "小区" },
+  { prop: "date", label: "日期" },
+  { prop: "price", label: "价格" },
+  { prop: "avgprice", label: "均价" },
+  { prop: "listedprice", label: "挂牌价" },
+  { prop: "arch", label: "户型" },
+  { prop: "floor", label: "楼层" },
+  { prop: "farea", label: "建筑面积" },
+  { prop: "duplex", label: "复式" },
+  { prop: "towards", label: "朝向" },
+  { prop: "fitment", label: "装修" },
+  { prop: "ages", label: "楼龄" },
+  { prop: "rate", label: "评分" },
+  { prop: "rightage", label: "产权年限" },
+  { prop: "elevator", label: "有无电梯" },
+  { prop: "ownership", label: "产权" },
+  { prop: "span", label: "跨度" },
+  { prop: "chtime", label: "创建时间" },
+  { prop: "visitor", label: "访问量" },
+  { prop: "star", label: "星级" },
+  { prop: "look", label: "关注量" }
 ];
 
 // 删除用户信息
@@ -220,10 +168,10 @@ const batchDelete = async (id: string[]) => {
 };
 
 // 切换用户状态
-const changeStatus = async (row: User.ResUserList) => {
-  await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
-  proTable.value?.getTableList();
-};
+// const changeStatus = async (row: User.ResUserList) => {
+//   await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
+//   proTable.value?.getTableList();
+// };
 
 // 导出用户列表
 const downloadFile = async () => {

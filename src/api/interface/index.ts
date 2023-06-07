@@ -116,14 +116,17 @@ export namespace Estate {
     farea: string;
     duplex: string; // 复式
     towards: string;
+    fitment: string; // 装修
     ages: string;
-    heating: string;
     rate: string;
-    right: string;
+    rightage: string;
     elevator: string;
-    range: string;
-    change: string;
+    ownership: string; // 产权
+    span: string; // 跨度
+    chtime: string;
     visitor: string;
+    star: string;
+    look: string;
   }
   // 房产列表 响应
   export interface ResEstateList {
@@ -144,14 +147,17 @@ export namespace Estate {
     farea: string;
     duplex: string; // 复式
     towards: string;
+    fitment: string; // 装修
     ages: string;
-    heating: string;
     rate: string;
-    right: string;
+    rightage: string;
     elevator: string;
-    range: string;
-    change: string;
+    ownership: string; // 产权
+    span: string; // 跨度
+    chtime: string;
     visitor: string;
+    star: string;
+    look: string;
   }
   // 用户状态
   export interface ResStatus {
