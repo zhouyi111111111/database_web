@@ -1,15 +1,17 @@
 <template>
-  <el-card class="usermap">
+  <div class="usermap">
     <div id="map-container"></div>
-  </el-card>
+  </div>
 </template>
 
 <script>
 import AMapLoader from "@amap/amap-jsapi-loader";
+import { getEstateList } from "@/api/modules/estate";
 window._AMapSecurityConfig = {
   // 设置安全密钥
   securityJsCode: "41e61d4e48da1920af5bdde523f7087f"
 };
+
 // const map;
 export default {
   data() {
@@ -24,38 +26,45 @@ export default {
     this.initMap();
   },
   methods: {
+    getTableList() {
+      let newParams = { pageNum: 1, pageSize: 10, type: 1 };
+      return getEstateList(newParams);
+    },
     addmarker() {
       let icon = "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png";
-      let marker = new window.AMap.Marker({
-        map: map,
-        title: "一个点", //tem.title,
-        icon,
-        position: [121.214777, 31.287584]
-      });
-
-      map.add(marker);
-
-      const info = {
-        name: "天一广场",
-        address: "浙江省宁波市海曙区中山东路188号",
-        phone: "(0574)87683088",
-        time: "10:00-22:00"
-        //imageUrl: square
-      };
-
-      marker.on("click", function (e) {
-        let infoWindow = new window.AMapUI.SimpleInfoWindow({
-          infoTitle: `<span style="font-size: 14px;">${info.name}</span>`,
-          infoBody: `
-            <el-card class="info-card">
-              <div class="info-address">${info.address}</div>
-              <div class="info-time">${info.time}</div>
-              <el-button class="info-phone" type="primary">${info.phone}</el-button>
-            </el-card>
-          `
+      // let list = this.getTableList();
+      let list = this.getTableList();
+      for (let i = 0; i < list.length; i++) {
+        let marker = new window.AMap.Marker({
+          map: this.map,
+          title: list[i].estatename,
+          icon,
+          position: [list[i].lug, list[i].lat]
         });
-        infoWindow.open(map, e.lnglat);
-      });
+
+        const info = {
+          name: "天一广场",
+          address: "浙江省宁波市海曙区中山东路188号",
+          phone: "(0574)87683088",
+          time: "10:00-22:00"
+          //imageUrl: square
+        };
+
+        marker.on("click", function (e) {
+          let infoWindow = new window.AMapUI.SimpleInfoWindow({
+            infoTitle: `<span style="font-size: 14px;">${info.name}</span>`,
+            infoBody: `
+              <el-card class="info-card">
+                <div class="info-address">${info.address}</div>
+                <div class="info-time">${info.time}</div>
+                <el-button class="info-phone" type="primary">${info.phone}</el-button>
+              </el-card>
+              `
+          });
+          infoWindow.open(map, e.lnglat);
+        });
+        this.map.add(marker);
+      }
     },
     initMap() {
       AMapLoader.load({
@@ -67,11 +76,10 @@ export default {
         }
       })
         .then(AMap => {
-          console.log(AMap);
-          map = new AMap.Map("map-container", {
+          this.map = new AMap.Map("map-container", {
             viewMode: "2D", //  是否为3D地图模式
             zoom: 13, // 初始化地图级别
-            center: [121.214755, 31.285606], //中心点坐标
+            center: [121.4498846931383, 31.231549708171933], //中心点坐标
             resizeEnable: true
           });
           this.addmarker();
