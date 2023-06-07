@@ -1,7 +1,5 @@
 <template>
-  <div class="usermap">
-    <div id="map-container"></div>
-  </div>
+  <div id="map-container"></div>
 </template>
 
 <script>
@@ -30,41 +28,80 @@ export default {
       let newParams = { pageNum: 1, pageSize: 10, type: 1 };
       return getEstateList(newParams);
     },
+    closeInfoWindow() {
+      this.map.clearInfoWindow();
+    },
+    createInfoWindow(title, content) {
+      let info = document.createElement("div");
+      info.className = "custom-info input-card content-window-card";
+
+      //可以通过下面的方式修改自定义窗体的宽高
+      // info.style.width = "400px";
+      // 定义顶部标题
+      let top = document.createElement("div");
+      let titleD = document.createElement("div");
+      let closeX = document.createElement("img");
+      top.className = "info-top";
+      titleD.innerHTML = title;
+      closeX.src = "https://webapi.amap.com/images/close2.gif";
+      closeX.onclick = this.closeInfoWindow;
+
+      top.appendChild(titleD);
+      top.appendChild(closeX);
+      info.appendChild(top);
+
+      // 定义中部内容
+      let middle = document.createElement("div");
+      middle.className = "info-middle";
+      middle.style.backgroundColor = "white";
+      middle.innerHTML = content;
+      info.appendChild(middle);
+
+      // 定义底部内容
+      let bottom = document.createElement("div");
+      bottom.className = "info-bottom";
+      bottom.style.position = "relative";
+      bottom.style.top = "0px";
+      bottom.style.margin = "0 auto";
+      let sharp = document.createElement("img");
+      sharp.src = "https://webapi.amap.com/images/sharp.png";
+      bottom.appendChild(sharp);
+      info.appendChild(bottom);
+      return info;
+    },
     addmarker() {
-      let icon = "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png";
-      // let list = this.getTableList();
-      let list = this.getTableList();
-      for (let i = 0; i < list.length; i++) {
-        let marker = new window.AMap.Marker({
-          map: this.map,
-          title: list[i].estatename,
-          icon,
-          position: [list[i].lug, list[i].lat]
-        });
-
-        const info = {
-          name: "天一广场",
-          address: "浙江省宁波市海曙区中山东路188号",
-          phone: "(0574)87683088",
-          time: "10:00-22:00"
-          //imageUrl: square
-        };
-
-        marker.on("click", function (e) {
-          let infoWindow = new window.AMapUI.SimpleInfoWindow({
-            infoTitle: `<span style="font-size: 14px;">${info.name}</span>`,
-            infoBody: `
-              <el-card class="info-card">
-                <div class="info-address">${info.address}</div>
-                <div class="info-time">${info.time}</div>
-                <el-button class="info-phone" type="primary">${info.phone}</el-button>
-              </el-card>
-              `
+      this.map.clearMap();
+      this.getTableList().then(res => {
+        let list = res.data.list;
+        for (let i = 0; i < list.length; i++) {
+          let marker = new AMap.Marker({
+            map: this.map,
+            title: list[i].estatename,
+            position: [list[i].lug, list[i].lat]
           });
-          infoWindow.open(map, e.lnglat);
-        });
-        this.map.add(marker);
-      }
+
+          // 实例化信息窗体
+          let title = `${list[i].estatename}<span style="font-size:11px;color:#F00;">价格:${list[i].price}万</span>`,
+            content = [];
+          content.push("<img src='http://tpc.googlesyndication.com/simgad/5843493769827749134'>套内面积：" + list[i].farea);
+          content.push("户型：" + list[i].arch);
+          content.push("<a href='https://ditu.amap.com/detail/B000A8URXB?citycode=110105'>详细信息</a>");
+          let infoWindow = new AMap.InfoWindow({
+            isCustom: true, // 使用自定义窗体
+            content: this.createInfoWindow(title, content.join("<br/>")),
+            offset: new AMap.Pixel(16, -45)
+          });
+
+          AMap.Event.addListener(
+            marker,
+            "click",
+            function () {
+              infoWindow.open(this.map, marker.getPosition());
+            }.bind(this)
+          );
+          this.map.add(marker);
+        }
+      });
     },
     initMap() {
       AMapLoader.load({
@@ -92,15 +129,83 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+html,
+body,
 #map-container {
-  width: 800px;
-  height: 500px;
+  height: 100%;
+  width: 100%;
 }
 
-.usermap {
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  margin-bottom: 20px;
+.content-window-card {
+  position: relative;
+  box-shadow: none;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  padding: 0;
+}
+
+.content-window-card p {
+  height: 2rem;
+}
+
+.custom-info {
+  border: solid 1px silver;
+}
+
+div.info-top {
+  position: relative;
+  background: none repeat scroll 0 0 #f9f9f9;
+  border-bottom: 1px solid #ccc;
+  border-radius: 5px 5px 0 0;
+}
+
+div.info-top div {
+  display: inline-block;
+  color: #333333;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 31px;
+  padding: 0 10px;
+}
+
+div.info-top img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition-duration: 0.25s;
+}
+
+div.info-top img:hover {
+  box-shadow: 0px 0px 5px #000;
+}
+
+div.info-middle {
+  font-size: 12px;
+  padding: 10px 6px;
+  line-height: 20px;
+}
+
+div.info-bottom {
+  height: 0px;
+  width: 100%;
+  clear: both;
+  text-align: center;
+}
+
+div.info-bottom img {
+  position: relative;
+  z-index: 104;
+}
+
+span {
+  margin-left: 5px;
+  font-size: 11px;
+}
+
+.info-middle img {
+  float: left;
+  margin-right: 6px;
 }
 </style>

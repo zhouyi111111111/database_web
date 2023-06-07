@@ -6,3 +6,5 @@ Scripts
 pyvenv.cfg
 test_main.http
 sql_app/db_info.json
+datta.json
+main_local.py
