@@ -24,7 +24,6 @@ class Estate(Base):
     duplex = Column(String)
     towards = Column(String)
     fitment = Column(String)
-    ages = Column(String)
     rate = Column(String)
     rightage = Column(String)
     elevator = Column(String)

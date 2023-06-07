@@ -7,8 +7,8 @@ import json
 with open('sql_app/db_info.json', 'r') as json_file:
     data = json.load(json_file)
     USER = data['user']
-    PWD = data['pwd']
-    DB_NAME = data['db_name']
+    PWD = data['password']
+    DB_NAME = data['database']
 
 SQLALCHEMY_DATABASE_URL = f'mysql+mysqlconnector://{USER}:{PWD}@localhost:3306/{DB_NAME}?charset=utf8&auth_plugin=mysql_native_password'
 engine = create_engine(

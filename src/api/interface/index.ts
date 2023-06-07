@@ -117,7 +117,6 @@ export namespace Estate {
     duplex: string; // 复式
     towards: string;
     fitment: string; // 装修
-    ages: string;
     rate: string;
     rightage: string;
     elevator: string;
@@ -148,7 +147,6 @@ export namespace Estate {
     duplex: string; // 复式
     towards: string;
     fitment: string; // 装修
-    ages: string;
     rate: string;
     rightage: string;
     elevator: string;

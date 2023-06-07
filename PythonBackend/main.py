@@ -18,10 +18,10 @@ class Token(BaseModel):
     access_token: str
 
 class reqEstateList(BaseModel):
-    endTime: str
+    endTime: Union [str, None]
     pageNum: int
-    pageSize: int
-    startTime: str
+    pageSize: Union [int, None]
+    startTime: Union [str, None]
     type: int
 
 @app.post("/geeker/login")
@@ -38,7 +38,6 @@ def logout():
 
 
 # db
-
 def get_db():
     db = SessionLocal()
     try:
@@ -48,8 +47,11 @@ def get_db():
 
 from pprint import pprint
 @app.post("/geeker/estate/list")
-def EstateList(req: reqEstateList):
-    data = crud.get_estates(db, skip=(req.pageNum-1)*req.pageSize, limit=req.pageSize)
+def EstateList(req: reqEstateList, db: Session = Depends(get_db)):
+    if req.pageSize == None:
+        req.pageSize = 10
+    list = crud.get_estates(db, skip=(req.pageNum-1)*req.pageSize, limit=req.pageSize)
+    data = {"list": list, "pageNum": req.pageNum, "pageSize": req.pageSize, "total": 1000}
     return {"code": 200, "data": data, "msg": "成功"}
 
 

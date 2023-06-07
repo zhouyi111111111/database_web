@@ -20,7 +20,6 @@ class EstateBase(BaseModel):
     duplex: str
     towards: str
     fitment: str
-    ages: str
     rate: str
     rightage: str
     elevator: str
@@ -33,8 +32,6 @@ class EstateBase(BaseModel):
 
 class Estate(EstateBase):
     id: str
-    pageNum: Union[str, None] = None
-    pageSize: Union[str, None] = None
 
     class Config:
         orm_mode = True

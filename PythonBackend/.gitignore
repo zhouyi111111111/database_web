@@ -1,0 +1,8 @@
+__pycache__
+.idea
+include
+Lib
+Scripts
+pyvenv.cfg
+test_main.http
+sql_app/db_info.json

@@ -92,7 +92,9 @@ const getTableList = (params: any) => {
   newParams.createTime && (newParams.startTime = newParams.createTime[0]);
   newParams.createTime && (newParams.endTime = newParams.createTime[1]);
   delete newParams.createTime;
-  return getEstateList(newParams);
+  let data = getEstateList(newParams);
+  console.dir(data);
+  return data;
 };
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
@@ -142,7 +144,6 @@ const columns: ColumnProps<User.ResUserList>[] = [
   { prop: "duplex", label: "复式" },
   { prop: "towards", label: "朝向" },
   { prop: "fitment", label: "装修" },
-  { prop: "ages", label: "楼龄" },
   { prop: "rate", label: "评分" },
   { prop: "rightage", label: "产权年限" },
   { prop: "elevator", label: "有无电梯" },
