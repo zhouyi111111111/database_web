@@ -21,3 +21,6 @@ def delete_estate(db: Session, estate_id: str):
         db.delete(db_estate)
         db.commit()
     return db_estate
+
+def get_points(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Point).offset(skip).limit(limit).all()

@@ -5,6 +5,7 @@
 <script>
 import AMapLoader from "@amap/amap-jsapi-loader";
 import { getEstateList } from "@/api/modules/estate";
+import { getPointList } from "@/api/modules/fixpoint";
 window._AMapSecurityConfig = {
   // 设置安全密钥
   securityJsCode: "41e61d4e48da1920af5bdde523f7087f"
@@ -25,8 +26,12 @@ export default {
   },
   methods: {
     getTableList() {
-      let newParams = { pageNum: 1, pageSize: 10, type: 1 };
+      let newParams = { pageNum: 1, pageSize: 50, type: 1 };
       return getEstateList(newParams);
+    },
+    getPoint() {
+      let newParams = { pageNum: 1, pageSize: 50, type: 1 };
+      return getPointList(newParams);
     },
     closeInfoWindow() {
       this.map.clearInfoWindow();
@@ -102,6 +107,18 @@ export default {
           this.map.add(marker);
         }
       });
+      this.getPoint().then(res => {
+        let list = res.data.list;
+        for (let i = 0; i < list.length; i++) {
+          let marker = new AMap.Marker({
+            icon: "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png",
+            map: this.map,
+            title: list[i].name,
+            position: [list[i].lng, list[i].lat]
+          });
+          this.map.add(marker);
+        }
+      });
     },
     initMap() {
       AMapLoader.load({
@@ -114,7 +131,7 @@ export default {
       })
         .then(AMap => {
           this.map = new AMap.Map("map-container", {
-            viewMode: "2D", //  是否为3D地图模式
+            viewMode: "3D", //  是否为3D地图模式
             zoom: 13, // 初始化地图级别
             center: [121.4498846931383, 31.231549708171933], //中心点坐标
             resizeEnable: true

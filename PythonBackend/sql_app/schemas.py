@@ -38,3 +38,19 @@ class Estate(EstateBase):
 
 class EstateCreate(EstateBase):
     pass
+
+class EstateBase(BaseModel):
+    name : str
+    lng : str
+    lat : str
+    address : str
+    category : str
+
+class Estate(EstateBase):
+    pass
+
+    class Config:
+        orm_mode = True
+
+class EstateCreate(EstateBase):
+    pass

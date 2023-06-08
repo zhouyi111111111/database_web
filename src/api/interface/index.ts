@@ -162,21 +162,24 @@ export namespace Estate {
     userLabel: string;
     userValue: number;
   }
-  // 用户性别
-  export interface ResGender {
-    genderLabel: string;
-    genderValue: number;
-  }
-  // 用户部门
-  export interface ResDepartment {
-    id: string;
+}
+
+// 城区固定兴趣点模块
+export namespace Point {
+  // 请求参数对象
+  export interface ReqPointParams extends ReqPage {
     name: string;
-    children?: ResDepartment[];
+    lng: string;
+    lat: string;
+    address: string;
+    category: string;
   }
-  // 用户角色
-  export interface ResRole {
-    id: string;
+  // 兴趣点列表 响应
+  export interface ResPointList {
     name: string;
-    children?: ResDepartment[];
+    lng: string;
+    lat: string;
+    address: string;
+    category: string;
   }
 }

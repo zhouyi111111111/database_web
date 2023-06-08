@@ -24,6 +24,13 @@ class reqEstateList(BaseModel):
     startTime: Union [str, None]
     type: int
 
+class reqPointList(BaseModel):
+    endTime: Union [str, None]
+    pageNum: int
+    pageSize: Union [int, None]
+    startTime: Union [str, None]
+    type: int
+
 @app.post("/geeker/login")
 async def login(user: User):
     if (user.username == 'admin' and user.password == 'e10adc3949ba59abbe56e057f20f883e') \
@@ -45,12 +52,19 @@ def get_db():
     finally:
         db.close()
 
-from pprint import pprint
 @app.post("/geeker/estate/list")
 def EstateList(req: reqEstateList, db: Session = Depends(get_db)):
     if req.pageSize == None:
         req.pageSize = 10
     list = crud.get_estates(db, skip=(req.pageNum-1)*req.pageSize, limit=req.pageSize)
+    data = {"list": list, "pageNum": req.pageNum, "pageSize": req.pageSize, "total": 1000}
+    return {"code": 200, "data": data, "msg": "成功"}
+
+@app.post("/geeker/point/list")
+def PointList(req: reqPointList, db: Session = Depends(get_db)):
+    if req.pageSize == None:
+        req.pageSize = 10
+    list = crud.get_points(db, skip=(req.pageNum-1)*req.pageSize, limit=req.pageSize)
     data = {"list": list, "pageNum": req.pageNum, "pageSize": req.pageSize, "total": 1000}
     return {"code": 200, "data": data, "msg": "成功"}
 

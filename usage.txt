@@ -15,7 +15,7 @@ web-admin-template:         // 启动前端
         pip install fastapi
         pip install "uvicorn[standard]"
 
-        source venv/bin/activate    // 进虚拟环境
+         .\Scripts\activate.ps1    // 进虚拟环境
         deactivate                  // 出虚拟环境
 
 

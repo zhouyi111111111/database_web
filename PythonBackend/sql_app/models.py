@@ -33,3 +33,12 @@ class Estate(Base):
     visitor = Column(String)
     star = Column(String)
     look = Column(String)
+
+class Point(Base):
+    __tablename__ = 'fixpoint'
+
+    name = Column(String, primary_key=True)
+    lng = Column(String)
+    lat = Column(String)
+    address = Column(String)
+    category = Column(String)
