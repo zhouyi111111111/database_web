@@ -46,7 +46,6 @@ export namespace Login {
 
 // 用户管理模块
 export namespace User {
-  // 请求参数对象
   export interface ReqUserParams extends ReqPage {
     username: string;
     gender: number;
@@ -56,7 +55,6 @@ export namespace User {
     createTime: string[];
     status: number;
   }
-  // 用户列表 响应
   export interface ResUserList {
     id: string;
     username: string;
@@ -71,23 +69,19 @@ export namespace User {
     photo: any[];
     children?: ResUserList[];
   }
-  // 用户状态
   export interface ResStatus {
     userLabel: string;
     userValue: number;
   }
-  // 用户性别
   export interface ResGender {
     genderLabel: string;
     genderValue: number;
   }
-  // 用户部门
   export interface ResDepartment {
     id: string;
     name: string;
     children?: ResDepartment[];
   }
-  // 用户角色
   export interface ResRole {
     id: string;
     name: string;
@@ -95,67 +89,35 @@ export namespace User {
   }
 }
 
-// 房产管理模块
-export namespace Estate {
+// 股票管理模块
+export namespace stock {
   // 请求参数对象
-  export interface ReqEstateParams extends ReqPage {
-    id: string;
-    estatename: string;
-    lug: string;
-    lat: string;
-    prvin: string;
-    city: string;
-    munici: string;
-    community: string;
-    date: string;
-    price: string;
-    avgprice: string;
-    listedprice: string;
-    arch: string; // 户型
-    floor: string;
-    farea: string;
-    duplex: string; // 复式
-    towards: string;
-    fitment: string; // 装修
-    rate: string;
-    rightage: string;
-    elevator: string;
-    ownership: string; // 产权
-    span: string; // 跨度
-    chtime: string;
-    visitor: string;
-    star: string;
-    look: string;
+  export interface ReqstockParams extends ReqPage {
+    ts_code: string;
+    trade_date: string;
+    open: string;
+    high: string;
+    low: string;
+    close: string;
+    pre_close: string;
+    change: string;
+    pct_chg: string;
+    vol: string;
+    amount: string;
   }
-  // 房产列表 响应
-  export interface ResEstateList {
-    id: string;
-    estatename: string;
-    lug: string;
-    lat: string;
-    prvin: string;
-    city: string;
-    munici: string;
-    community: string;
-    date: string;
-    price: string;
-    avgprice: string;
-    listedprice: string;
-    arch: string; // 户型
-    floor: string;
-    farea: string;
-    duplex: string; // 复式
-    towards: string;
-    fitment: string; // 装修
-    rate: string;
-    rightage: string;
-    elevator: string;
-    ownership: string; // 产权
-    span: string; // 跨度
-    chtime: string;
-    visitor: string;
-    star: string;
-    look: string;
+  // 股票列表 响应
+  export interface ResstockList {
+    ts_code: string;
+    trade_date: string;
+    open: string;
+    high: string;
+    low: string;
+    close: string;
+    pre_close: string;
+    change: string;
+    pct_chg: string;
+    vol: string;
+    amount: string;
   }
   // 用户状态
   export interface ResStatus {
