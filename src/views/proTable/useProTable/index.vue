@@ -10,12 +10,12 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
-        <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 新增记录 </el-button>
-        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd"> 批量添加记录 </el-button>
-        <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile"> 导出数据 </el-button>
+        <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 新增股票 </el-button>
+        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd"> 批量添加股票 </el-button>
+        <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile"> 导出股票数据 </el-button>
         <el-button type="primary" plain @click="toDetail"> To 子集详情页面 </el-button>
         <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
-          批量删除记录
+          批量删除股票
         </el-button>
       </template>
       <!-- Expand -->
@@ -52,6 +52,7 @@ import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { useHandleData } from "@/hooks/useHandleData";
 import { useDownload } from "@/hooks/useDownload";
+
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "@/components/ImportExcel/index.vue";
@@ -59,7 +60,7 @@ import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, EditPen, Download, Upload, View } from "@element-plus/icons-vue";
 import { deleteUser, editUser, addUser, exportUserInfo, BatchAddUser } from "@/api/modules/user";
-import { getEstateList } from "@/api/modules/estate";
+import { getstockList } from "@/api/modules/stock";
 
 const router = useRouter();
 
@@ -92,20 +93,20 @@ const getTableList = (params: any) => {
   newParams.createTime && (newParams.startTime = newParams.createTime[0]);
   newParams.createTime && (newParams.endTime = newParams.createTime[1]);
   delete newParams.createTime;
-  return getEstateList(newParams);
+  return getstockList(newParams);
 };
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
-// const { BUTTONS } = useAuthButtons();
+//const { BUTTONS } = useAuthButtons();
 
 // 自定义渲染表头（使用tsx语法）
-// const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
-//   return (
-//     <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
-//       {scope.column.label}
-//     </el-button>
-//   );
-// };
+//const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
+//return (
+//<el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
+//{scope.column.label}
+//</el-button>
+//);
+//};
 
 // 表格配置项
 const columns: ColumnProps<User.ResUserList>[] = [
@@ -113,44 +114,24 @@ const columns: ColumnProps<User.ResUserList>[] = [
   { type: "index", label: "#", width: 80 },
   { type: "expand", label: "Expand", width: 100 },
   {
-    prop: "estatename",
-    label: "房源名称",
+    prop: "ts_code",
+    label: "股票代码",
     search: { el: "input" }
-    // render: scope => {
-    //   return (
-    //     <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
-    //       {scope.row.username}
-    //     </el-button>
-    //   );
-    // }
   },
-  { prop: "id", label: "ID" },
-  { prop: "estatename", label: "楼盘名称" },
-  { prop: "lug", label: "经度" },
-  { prop: "lat", label: "纬度" },
-  { prop: "prvin", label: "省份" },
-  { prop: "city", label: "城市" },
-  { prop: "munici", label: "区县" },
-  { prop: "community", label: "小区" },
-  { prop: "date", label: "日期" },
-  { prop: "price", label: "价格" },
-  { prop: "avgprice", label: "均价" },
-  { prop: "listedprice", label: "挂牌价" },
-  { prop: "arch", label: "户型" },
-  { prop: "floor", label: "楼层" },
-  { prop: "farea", label: "建筑面积" },
-  { prop: "duplex", label: "复式" },
-  { prop: "towards", label: "朝向" },
-  { prop: "fitment", label: "装修" },
-  { prop: "rate", label: "评分" },
-  { prop: "rightage", label: "产权年限" },
-  { prop: "elevator", label: "有无电梯" },
-  { prop: "ownership", label: "产权" },
-  { prop: "span", label: "跨度" },
-  { prop: "chtime", label: "创建时间" },
-  { prop: "visitor", label: "访问量" },
-  { prop: "star", label: "星级" },
-  { prop: "look", label: "关注量" }
+  {
+    prop: "trade_date",
+    label: "日期",
+    search: { el: "input" }
+  },
+  { prop: "open", label: "开盘价" },
+  { prop: "high", label: "最高价" },
+  { prop: "low", label: "最低价" },
+  { prop: "close", label: "收盘价" },
+  { prop: "pre_close", label: "预收盘价" },
+  { prop: "change", label: "涨跌额" },
+  { prop: "pct_chg", label: "涨跌幅" },
+  { prop: "vol", label: "成交量" },
+  { prop: "amount", label: "成交额" }
 ];
 
 // 删除用户信息
@@ -167,10 +148,10 @@ const batchDelete = async (id: string[]) => {
 };
 
 // 切换用户状态
-// const changeStatus = async (row: User.ResUserList) => {
-//   await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
-//   proTable.value?.getTableList();
-// };
+//const changeStatus = async (row: User.ResUserList) => {
+//await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
+//proTable.value?.getTableList();
+//};
 
 // 导出用户列表
 const downloadFile = async () => {
@@ -204,3 +185,4 @@ const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   drawerRef.value?.acceptParams(params);
 };
 </script>
+
